@@ -123,7 +123,7 @@ Send ZCL foundation command to other endpoint.
 3. `cId` (_Number_ | _String_): Specifies the cluster ID.  
 4. `cmd` (_String_ | _Number_): Foundation command ID.  
 5. `zclData` (_Object_ | _Array_): ZCL data depending on the given command. Please see [ZCL Foundation Command Reference Tables](https://github.com/zigbeer/zcl-packet#31-zcl-foundation-command-reference-table) for `zclData` format of different foundation command.  
-6. 'cfg' (_Object_): The following table shows the `cfg` properties.  
+6. `cfg` (_Object_): The following table shows the `cfg` properties.  
 7. `callback` (_Function_): `function (err, result) {}`. Get called when receive the response of foundation command.   
 
 | Property      | Type  | Mandatory | Description              | Default value    |
