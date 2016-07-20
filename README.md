@@ -1,4 +1,4 @@
-zive
+#zive
 
 
 [![NPM](https://nodei.co/npm/zive.png?downloads=true)](https://nodei.co/npm/zive/)  
@@ -120,9 +120,9 @@ Send ZCL foundation command to other endpoint.
 
 1. `dstAddr` (_Number_): Short address of the destination device.  
 2. `dstEpId` (_Number_): Endpoint of the destination device.  
-3. 'cId' (_Number_ | _String_): Specifies the cluster ID.  
-4. 'cmd' (_String_ | _Number_): Foundation command ID.  
-5. 'zclData' (_Object_ | _Array_): ZCL data depending on the given command. Please see [ZCL Foundation Command Reference Tables](https://github.com/zigbeer/zcl-packet#31-zcl-foundation-command-reference-table) for `zclData` format of different foundation command.  
+3. `cId` (_Number_ | _String_): Specifies the cluster ID.  
+4. `cmd` (_String_ | _Number_): Foundation command ID.  
+5. `zclData` (_Object_ | _Array_): ZCL data depending on the given command. Please see [ZCL Foundation Command Reference Tables](https://github.com/zigbeer/zcl-packet#31-zcl-foundation-command-reference-table) for `zclData` format of different foundation command.  
 6. 'cfg' (_Object_): The following table shows the `cfg` properties.  
 7. `callback` (_Function_): `function (err, result) {}`. Get called when receive the response of foundation command.   
 
@@ -164,10 +164,10 @@ Send ZCL functional command to other endpoint.
 
 1. `dstAddr` (_Number_): Short address of the destination device.  
 2. `dstEpId` (_Number_): Endpoint of the destination device.  
-3. 'cId' (_Number_ | _String_): Specifies the cluster ID.  
-4. 'cmd' (_String_ | _Number_): Functional command ID.  
-5. 'zclData' (_Object_ | _Array_): ZCL data depending on the given command. Please see [ZCL Functional Command Reference Table](https://github.com/zigbeer/zcl-packet#FuncCmdTbl) for `zclData` format of different functional command.  
-6. 'cfg' (_Object_): The following table shows the `cfg` properties.  
+3. `cId` (_Number_ | _String_): Specifies the cluster ID.  
+4. `cmd` (_String_ | _Number_): Functional command ID.  
+5. `zclData` (_Object_ | _Array_): ZCL data depending on the given command. Please see [ZCL Functional Command Reference Table](https://github.com/zigbeer/zcl-packet#FuncCmdTbl) for `zclData` format of different functional command.  
+6. `cfg` (_Object_): The following table shows the `cfg` properties.  
 7. `callback` (_Function_): `function (err, result) {}`. Get called when receive the response of functional command.   
 
 | Property      | Type  | Mandatory | Description              | Default value    |
