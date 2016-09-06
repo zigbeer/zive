@@ -17,14 +17,13 @@
   },
   "homepage": "https://github.com/zigbeer/zive#readme",
   "dependencies": {
-    "busyman": "^0.1.1",
-    "zcl-id": "0.0.5"
+    "busyman": "^0.2.1",
+    "zcl-id": "^0.1.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "lodash": "^4.13.1",
     "mocha": "^2.5.3",
-    "sinon": "^1.17.4",
-    "ziee": "0.0.8"
+    "sinon": "^1.17.5",
+    "ziee": "^0.0.9"
   }
 }

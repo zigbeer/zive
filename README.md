@@ -13,13 +13,13 @@
 1. [Overview](#Overview)  
 2. [Installation](#Installation)  
 3. [Usage](#Usage)  
-4. [APIs](#APIs)
+4. [APIs](#APIs)  
 5. [License](#License)  
 
 <a name="Overview"></a>
 ## 1. Overview  
 
-**zive** is a Class that helps you create a _Zigbee Application_, and it will handle all ZCL message for your _Zigbee Application_, with the need to deal with by yourself. 
+**zive** is a Class that helps you create a _ZigBee Application_, and it will handle all ZCL message for your _ZigBee Application_, with the need to deal with by yourself.  
 
 <br />
 
@@ -33,30 +33,30 @@
 <a name="Usage"></a>
 ## 3. Usage  
 
-Here is a quick example to show you how to create your Zigbee Application:  
+Here is a quick example to show you how to create your ZigBee Application:  
 
 ```js 
-// Import the Zive Class  
-var Zive = require('zive');  
+// Import the Zive Class
+var Zive = require('zive');
 
-// Prepare your endpoint information and cluserts  
-var epInfo = {  
-        profId: 260,  
-        devId: 6,  
-        discCmds: []  
+// Prepare your endpoint information and clusters
+var epInfo = {
+        profId: 260,
+        devId: 6,
+        discCmds: []
     };
 
-// Prepare your clusters and initialize with its attributes, access control flags, .etc
-var Ziee = require('ziee'),  
-    ziee = new Ziee();  
+// Prepare your clusters and initialize with its attributes, access control flags, etc.
+var Ziee = require('ziee'),
+    ziee = new Ziee();
 
-ziee.init(cId, 'dir', ...);  
-ziee.init(cId, 'attrs', ...);  
-ziee.init(cId, 'acls', ...);  
-ziee.init(cId, 'cmds', ...);  
+ziee.init(cId, 'dir', ...);
+ziee.init(cId, 'attrs', ...);
+ziee.init(cId, 'acls', ...);
+ziee.init(cId, 'cmds', ...);
 
-// New a zive instance to be your Zigbee Application  
-var zive = new Zive(epInfo, ziee);  
+// New a zive instance to be your ZigBee Application
+var zive = new Zive(epInfo, ziee);
 ```
 
 <br />
@@ -70,29 +70,29 @@ var zive = new Zive(epInfo, ziee);
 
 *************************************************
 ## Zive Class
-Exposed by require('zive').
+Exposed by `require('zive')`  
 
 <a name="API_zive"></a>
 ### new Zive(epInfo, clusters)
 
-Create a new instance of Zive class. This document will use `zive` to indicate this kind of instance. A `zive` represents a _Zigbee Application_.  
+Create a new instance of `Zive` class. This document will use `zive` to denote the instance of this class. A `zive` represents a _ZigBee Application_.  
 
-**Arguments:**
+**Arguments:**  
 
 1. `epInfo` (_Object_): Endpoint information. The following table shows the `epInfo` properties.
-2. `clusters` (_Object_): ZCL Clusters. Plaese refer to [ziee](https://github.com/zigbeer/ziee) for how to create clusters in your application.
+2. `clusters` (_Object_): ZCL Clusters. Please refer to [ziee](https://github.com/zigbeer/ziee) for how to create clusters in your application.
 
 | Property | Type   | Mandatory | Description           |
 |----------|--------|-----------|-----------------------|
-| profId   | Nunber | required  | Profile ID            |
+| profId   | Number | required  | Profile ID            |
 | devId    | Number | required  | Device ID             |
 | discCmds | Array  | optional  | Discoverable Commands |
 
-**Returns**
+**Returns**  
 
 * (_Object_): zive
 
-**Example:**
+**Example:**  
 
 ```js
 var Zive = require('zive'),
@@ -114,7 +114,7 @@ var zive = new Zive(epInfo, ziee);
 <a name="API_found"></a>
 ### foundation(dstAddr, dstEpId, cId, cmd, zclData[, cfg], callback)  
 
-Send ZCL foundation command to other endpoint.  
+Send ZCL foundation command to another endpoint.  
 
 **Arguments:**  
 
@@ -158,7 +158,7 @@ zive.foundation(0x1234, 1, 'lightingColorCtrl', 'read', foundData, function (err
 <a name="API_func"></a>
 ### functional(dstAddr, dstEpId, cId, cmd, zclData[, cfg], callback)  
 
-Send ZCL functional command to other endpoint.  
+Send ZCL functional command to another endpoint.  
 
 **Arguments:**  
 

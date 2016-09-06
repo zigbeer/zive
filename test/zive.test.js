@@ -1,19 +1,17 @@
-var sinon = require('sinon'),
-    expect = require('chai').expect,
-    _ = require('lodash'),
-    
-    zclId = require('zcl-id');
+var _ = require('busyman'),
+    Ziee = require('ziee'),
+    sinon = require('sinon'),
+    zclId = require('zcl-id'),
+    expect = require('chai').expect;
 
-var Ziee = require('ziee');
 var Zive = require('../index.js');
-
 
 var ziee = new Ziee({});
 
 ziee.init('lightingColorCtrl', 'dir', { value: 1 });
 ziee.init('lightingColorCtrl', 'attrs', {
-    currentHue: 10,          
-    currentSaturation: {       
+    currentHue: 10,
+    currentSaturation: {
         read: function (cb) {
             cb(null, 20);
         },
@@ -21,15 +19,15 @@ ziee.init('lightingColorCtrl', 'attrs', {
             cb(null, val);
         }
     },
-    colorMode: {               
+    colorMode: {
         read: function (cb) {
             cb(null, 30);
         }
     }
-}); 
+});
 
-ziee.init('lightingColorCtrl', 'acls', {    
-    currentHue: 'RW',                      
+ziee.init('lightingColorCtrl', 'acls', {
+    currentHue: 'RW',
     currentSaturation: 'RW',
     colorMode: 'R'
 });
@@ -40,7 +38,7 @@ ziee.init('lightingColorCtrl', 'cmds', {
     },
     stepHue: function (zapp, stepmode, stepsize, transtime, cb) {
     },
-    stepColor: {    
+    stepColor: {
         exec: function (zapp, stepx, stepy, transtime, cb) {
         }
     }
@@ -61,23 +59,23 @@ var afMsg = {
         srcaddr: '0x124b0012345678',
         srcendpoint: 8,
         dstendpoint: 10,
-        data: { 
+        data: {
             frameCntl: {
-                frameType: null, 
-                manufSpec: 0, 
-                direction: 0, 
+                frameType: null,
+                manufSpec: 0,
+                direction: 0,
                 disDefaultRsp: 1
-            }, 
-            manufCode: null, 
-            seqNUm: 60, 
-            cmdId: null, 
-            payload: null 
+            },
+            manufCode: null,
+            seqNUm: 60,
+            cmdId: null,
+            payload: null
         }
     },
     foundPayloads = {
         read: [
-            { attrId: 0x0000 }, 
-            { attrId: 0x0001 }, 
+            { attrId: 0x0000 },
+            { attrId: 0x0001 },
             { attrId: 0x0008 },
             { attrId: 0x0010 }
         ],
@@ -101,12 +99,12 @@ var afMsg = {
         ],
         configReport: [
             { direction: 0, attrId: 0x0000, dataType: 32, minRepIntval: 1, maxRepIntval: 3, repChange: 15 },
-            { direction: 0, attrId: 0x0001, dataType: 32, minRepIntval: 2, maxRepIntval: 5, repChange: 10} ,
+            { direction: 0, attrId: 0x0001, dataType: 32, minRepIntval: 2, maxRepIntval: 5, repChange: 10 },
             { direction: 1, attrId: 0x0001, timeout: 999 },
             { direction: 1, attrId: 0x0010, timeout: 999 }
         ],
         configReport2: [
-            { direction: 0, attrId: 0x0001, dataType: 32, minRepIntval: 10, maxRepIntval: 50, repChange: 5},
+            { direction: 0, attrId: 0x0001, dataType: 32, minRepIntval: 10, maxRepIntval: 50, repChange: 5 },
         ],
         readReportConfig: [
             { direction: 0, attrId: 0x0000 },
@@ -131,12 +129,11 @@ var afMsg = {
             transtime: 200,
         },
         stepColor: {
-            stepx: 60, 
-            stepy: 80, 
+            stepx: 60,
+            stepy: 80,
             transtime: 100
         }
     };
-
 
 var dstAddr = afMsg.srcaddr,
     dstEpId = afMsg.srcendpoint,
@@ -180,7 +177,7 @@ describe('Module Method Check', function() {
             var foundationStub = sinon.stub(zive, 'foundation', function () {}),
                 writeRspPayloads = [
                     { status: 0, attrId: 0x0000 },
-                    { status: 135, attrId: 0x0001 }, 
+                    { status: 135, attrId: 0x0001 },
                     { status: 135, attrId: 0x0008 },
                     { status: 134, attrId: 0x0010 }
                 ];
@@ -215,7 +212,7 @@ describe('Module Method Check', function() {
 
             afMsg.data.cmdId = zclId.foundation('writeUndiv').value;
             afMsg.data.payload = foundPayloads.writeUndiv;
-            
+
             zive.foundationHandler(afMsg);
             setTimeout(function () {
                 var foundArgs = [ dstAddr, dstEpId, cId, 'writeRsp', writeRspPayloads, cfg ];
@@ -263,10 +260,10 @@ describe('Module Method Check', function() {
             zive.foundationHandler(afMsg);
             setTimeout(function () {
                 var foundArgs = [ dstAddr, dstEpId, cId, 'configReportRsp', configReportRspPayloads, cfg ],
-                    attr1RptCfg = _.cloneDeep(ziee.get(cId, 'rptCfgs', 0x0000)),
+                    attr1RptCfg = ziee.get(cId, 'rptCfgs', 0x0000),
                     attr1Rpt = { attrId: 0x0000, dataType: 32, attrData: 20 },
                     attr1RptArgs = [ dstAddr, dstEpId, cId, 'report', attr1Rpt, { manufSpec: 0, direction: 1, disDefaultRsp: 1 } ],
-                    attr2RptCfg = _.cloneDeep(ziee.get(cId, 'rptCfgs', 0x0001)),
+                    attr2RptCfg = ziee.get(cId, 'rptCfgs', 0x0001),
                     attr2Rpt = { attrId: 0x0001, dataType: 32, attrData: 20 },
                     attr2RptArgs = [ dstAddr, dstEpId, cId, 'report', attr2Rpt, { manufSpec: 0, direction: 1, disDefaultRsp: 1 } ],
                     attr1RptCfgResult = {
@@ -304,9 +301,7 @@ describe('Module Method Check', function() {
 
         it('foundation cmd - configReport again', function (done) {
             var foundationStub = sinon.stub(zive, 'foundation', function () {}),
-                configReportRspPayloads = [
-                    { status: 0, attrId: 0x0001, direction: 0 }
-                ];
+                configReportRspPayloads = [ { status: 0, attrId: 0x0001, direction: 0 } ];
 
             afMsg.data.cmdId = zclId.foundation('configReport').value;
             afMsg.data.payload = foundPayloads.configReport2;
@@ -314,7 +309,7 @@ describe('Module Method Check', function() {
             zive.foundationHandler(afMsg);
             setTimeout(function () {
                 var foundArgs = [ dstAddr, dstEpId, cId, 'configReportRsp', configReportRspPayloads, cfg ],
-                    attrRptCfg = _.cloneDeep(ziee.get(cId, 'rptCfgs', 0x0001)),
+                    attrRptCfg = ziee.get(cId, 'rptCfgs', 0x0001),
                     attrRptCfgResult = {
                         pmin: 10,
                         pmax: 50,
@@ -349,7 +344,7 @@ describe('Module Method Check', function() {
             setTimeout(function () {
                 var attrRpt = { attrId: 0x0000, dataType: 32, attrData: 50 },
                     attrRptArgs = [ dstAddr, dstEpId, cId, 'report', attrRpt, { manufSpec: 0, direction: 1, disDefaultRsp: 1 } ],
-                    attrRptCfg = _.cloneDeep(ziee.get(cId, 'rptCfgs', 0x0000)),
+                    attrRptCfg = ziee.get(cId, 'rptCfgs', 0x0000),
                     attrRptCfgResult = {
                         pmin: 1,
                         pmax: 3,
