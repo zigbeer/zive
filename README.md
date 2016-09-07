@@ -19,7 +19,7 @@
 <a name="Overview"></a>
 ## 1. Overview  
 
-**zive** is a Class that helps you create a _ZigBee Application_, and it will handle all ZCL message for your _ZigBee Application_, with the need to deal with by yourself.  
+**zive** is a Class that helps you create a _ZigBee Application_. With **zive**, you just need to prepare the ZCL Clusters of your _ZigBee Application_, and it will handle all ZCL messages automatically without the need to deal with by yourself.
 
 <br />
 
@@ -39,7 +39,7 @@ Here is a quick example to show you how to create your ZigBee Application:
 // Import the Zive Class
 var Zive = require('zive');
 
-// Prepare your endpoint information and clusters
+// Prepare your endpoint information
 var epInfo = {
         profId: 260,
         devId: 6,
@@ -119,7 +119,7 @@ Send ZCL foundation command to another endpoint.
 **Arguments:**  
 
 1. `dstAddr` (_Number_): Short address of the destination device.  
-2. `dstEpId` (_Number_): Endpoint of the destination device.  
+2. `dstEpId` (_Number_): Endpoint ID of the destination device.  
 3. `cId` (_Number_ | _String_): Specifies the cluster ID.  
 4. `cmd` (_String_ | _Number_): Foundation command ID.  
 5. `zclData` (_Object_ | _Array_): ZCL data depending on the given command. Please see [ZCL Foundation Command Reference Tables](https://github.com/zigbeer/zcl-packet#31-zcl-foundation-command-reference-table) for `zclData` format of different foundation command.  

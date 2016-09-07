@@ -8,6 +8,8 @@ var Zive = require('../index.js');
 
 var ziee = new Ziee({});
 
+
+// init lightingColorCtrl cluster
 ziee.init('lightingColorCtrl', 'dir', { value: 1 });
 ziee.init('lightingColorCtrl', 'attrs', {
     currentHue: 10,
@@ -44,6 +46,9 @@ ziee.init('lightingColorCtrl', 'cmds', {
     }
 });
 
+// init genGroups cluster
+ziee.init('genGroups', 'dir', { value: 1 });
+
 ziee.init('genGroups', 'cmds', {
     add: function () {}
 });
@@ -54,12 +59,15 @@ var infos = {
     },
     zive = new Zive(infos, ziee);
 
+zive.foundation = function () {};
+zive.functional = function () {};
+
 var afMsg = {
         clusterid: 0x0300,
         srcaddr: '0x124b0012345678',
         srcendpoint: 8,
         dstendpoint: 10,
-        data: {
+        zclMsg: {
             frameCntl: {
                 frameType: null,
                 manufSpec: 0,
@@ -67,7 +75,7 @@ var afMsg = {
                 disDefaultRsp: 1
             },
             manufCode: null,
-            seqNUm: 60,
+            seqNum: 60,
             cmdId: null,
             payload: null
         }
@@ -139,15 +147,15 @@ var dstAddr = afMsg.srcaddr,
     dstEpId = afMsg.srcendpoint,
     cId = afMsg.clusterid,
     cfg = {
-        manufSpec: afMsg.data.frameCntl.manufSpec,
+        manufSpec: afMsg.zclMsg.frameCntl.manufSpec,
         direction: 1,
-        disDefaultRsp: afMsg.data.frameCntl.disDefaultRsp,
-        seqNUm: afMsg.data.seqNUm
+        disDefaultRsp: afMsg.zclMsg.frameCntl.disDefaultRsp,
+        seqNum: afMsg.zclMsg.seqNum
     };
 
 describe('Module Method Check', function() {
     describe('#.foundationHandler', function () {
-        afMsg.data.frameCntl.frameType = 0;
+        afMsg.zclMsg.frameCntl.frameType = 0;
 
         it('foundation cmd - read', function (done) {
             var foundationStub = sinon.stub(zive, 'foundation', function () {}),
@@ -158,8 +166,8 @@ describe('Module Method Check', function() {
                     { status: 134, attrId: 0x0010 }
                 ];
 
-            afMsg.data.cmdId = zclId.foundation('read').value;
-            afMsg.data.payload = foundPayloads.read;
+            afMsg.zclMsg.cmdId = zclId.foundation('read').value;
+            afMsg.zclMsg.payload = foundPayloads.read;
 
             zive.foundationHandler(afMsg);
             setTimeout(function () {
@@ -182,8 +190,8 @@ describe('Module Method Check', function() {
                     { status: 134, attrId: 0x0010 }
                 ];
 
-            afMsg.data.cmdId = zclId.foundation('write').value;
-            afMsg.data.payload = foundPayloads.write;
+            afMsg.zclMsg.cmdId = zclId.foundation('write').value;
+            afMsg.zclMsg.payload = foundPayloads.write;
 
             zive.foundationHandler(afMsg);
             setTimeout(function () {
@@ -210,8 +218,8 @@ describe('Module Method Check', function() {
                     { status: 134, attrId: 0x0010 }
                 ];
 
-            afMsg.data.cmdId = zclId.foundation('writeUndiv').value;
-            afMsg.data.payload = foundPayloads.writeUndiv;
+            afMsg.zclMsg.cmdId = zclId.foundation('writeUndiv').value;
+            afMsg.zclMsg.payload = foundPayloads.writeUndiv;
 
             zive.foundationHandler(afMsg);
             setTimeout(function () {
@@ -232,8 +240,8 @@ describe('Module Method Check', function() {
         it('foundation cmd - writeNoRsp', function (done) {
             var foundationStub = sinon.stub(zive, 'foundation', function () {});
 
-            afMsg.data.cmdId = zclId.foundation('writeNoRsp').value;
-            afMsg.data.payload = foundPayloads.writeNoRsp;
+            afMsg.zclMsg.cmdId = zclId.foundation('writeNoRsp').value;
+            afMsg.zclMsg.payload = foundPayloads.writeNoRsp;
 
             zive.foundationHandler(afMsg);
             setTimeout(function () {
@@ -254,8 +262,8 @@ describe('Module Method Check', function() {
                     { status: 134, attrId: 0x0010, direction: 1 }
                 ];
 
-            afMsg.data.cmdId = zclId.foundation('configReport').value;
-            afMsg.data.payload = foundPayloads.configReport;
+            afMsg.zclMsg.cmdId = zclId.foundation('configReport').value;
+            afMsg.zclMsg.payload = foundPayloads.configReport;
 
             zive.foundationHandler(afMsg);
             setTimeout(function () {
@@ -303,8 +311,8 @@ describe('Module Method Check', function() {
             var foundationStub = sinon.stub(zive, 'foundation', function () {}),
                 configReportRspPayloads = [ { status: 0, attrId: 0x0001, direction: 0 } ];
 
-            afMsg.data.cmdId = zclId.foundation('configReport').value;
-            afMsg.data.payload = foundPayloads.configReport2;
+            afMsg.zclMsg.cmdId = zclId.foundation('configReport').value;
+            afMsg.zclMsg.payload = foundPayloads.configReport2;
 
             zive.foundationHandler(afMsg);
             setTimeout(function () {
@@ -336,8 +344,8 @@ describe('Module Method Check', function() {
         it('foundation cmd - configReport, step report', function (done) {
             var foundationStub = sinon.stub(zive, 'foundation', function () {});
 
-            afMsg.data.cmdId = zclId.foundation('write').value;
-            afMsg.data.payload = [ { attrId: 0x0000, dataType: 32, attrData: 50 } ];
+            afMsg.zclMsg.cmdId = zclId.foundation('write').value;
+            afMsg.zclMsg.payload = [ { attrId: 0x0000, dataType: 32, attrData: 50 } ];
 
             zive.foundationHandler(afMsg);
 
@@ -372,8 +380,8 @@ describe('Module Method Check', function() {
                     { status: 134, attrId: 0x0010, direction: 0 }
                 ];
 
-            afMsg.data.cmdId = zclId.foundation('readReportConfig').value;
-            afMsg.data.payload = foundPayloads.readReportConfig;
+            afMsg.zclMsg.cmdId = zclId.foundation('readReportConfig').value;
+            afMsg.zclMsg.payload = foundPayloads.readReportConfig;
 
             zive.foundationHandler(afMsg);
             setTimeout(function () {
@@ -402,8 +410,8 @@ describe('Module Method Check', function() {
                     ]
                 };
 
-            afMsg.data.cmdId = zclId.foundation('discover').value;
-            afMsg.data.payload = foundPayloads.discover;
+            afMsg.zclMsg.cmdId = zclId.foundation('discover').value;
+            afMsg.zclMsg.payload = foundPayloads.discover;
 
             zive.foundationHandler(afMsg);
             setTimeout(function () {
@@ -419,13 +427,13 @@ describe('Module Method Check', function() {
     });
 
     describe('#.functionalHandler', function () {
-        afMsg.data.frameCntl.frameType = 1;
+        afMsg.zclMsg.frameCntl.frameType = 1;
 
         it('unsupport cmd', function (done) {
             var foundationStub = sinon.stub(zive, 'foundation', function () {});
 
-            afMsg.data.cmdId = zclId.functional('lightingColorCtrl', 'moveToSaturation').value;
-            afMsg.data.payload = {};
+            afMsg.zclMsg.cmdId = zclId.functional('lightingColorCtrl', 'moveToSaturation').value;
+            afMsg.zclMsg.payload = {};
 
             zive.functionalHandler(afMsg);
 
@@ -452,8 +460,8 @@ describe('Module Method Check', function() {
                 }),
                 foundationStub = sinon.stub(zive, 'foundation', function () {});
 
-            afMsg.data.cmdId = zclId.functional('lightingColorCtrl', 'moveToHue').value;
-            afMsg.data.payload = argObj;
+            afMsg.zclMsg.cmdId = zclId.functional('lightingColorCtrl', 'moveToHue').value;
+            afMsg.zclMsg.payload = argObj;
 
             zive.functionalHandler(afMsg);
 
@@ -483,8 +491,8 @@ describe('Module Method Check', function() {
                 foundationStub = sinon.stub(zive, 'foundation', function () {});
 
             afMsg.clusterid = zclId.cluster('genGroups').value;
-            afMsg.data.cmdId = zclId.functional('genGroups', 'add').value;
-            afMsg.data.payload = argObj;
+            afMsg.zclMsg.cmdId = zclId.functional('genGroups', 'add').value;
+            afMsg.zclMsg.payload = argObj;
 
             zive.functionalHandler(afMsg);
 
@@ -507,9 +515,9 @@ describe('Module Method Check', function() {
                 foundationStub = sinon.stub(zive, 'foundation', function () {});
 
             afMsg.clusterid = zclId.cluster('genGroups').value;
-            afMsg.data.frameCntl.disDefaultRsp = 0;
-            afMsg.data.cmdId = zclId.functional('genGroups', 'add').value;
-            afMsg.data.payload = argObj;
+            afMsg.zclMsg.frameCntl.disDefaultRsp = 0;
+            afMsg.zclMsg.cmdId = zclId.functional('genGroups', 'add').value;
+            afMsg.zclMsg.payload = argObj;
 
             cfg.disDefaultRsp = 0;
 
@@ -541,8 +549,8 @@ describe('Module Method Check', function() {
                 functionalStub = sinon.stub(zive, 'functional', function () {});
 
             afMsg.clusterid = zclId.cluster('genGroups').value;
-            afMsg.data.cmdId = zclId.functional('genGroups', 'add').value;
-            afMsg.data.payload = argObj;
+            afMsg.zclMsg.cmdId = zclId.functional('genGroups', 'add').value;
+            afMsg.zclMsg.payload = argObj;
 
             zive.functionalHandler(afMsg);
 
