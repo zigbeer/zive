@@ -8,7 +8,6 @@ var Zive = require('../index.js');
 
 var ziee = new Ziee({});
 
-
 // init lightingColorCtrl cluster
 ziee.init('lightingColorCtrl', 'dir', { value: 1 });
 ziee.init('lightingColorCtrl', 'attrs', {

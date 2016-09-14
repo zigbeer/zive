@@ -1,12 +1,11 @@
 #zive
-
+A ZCL framework for zigbee applications.  
 
 [![NPM](https://nodei.co/npm/zive.png?downloads=true)](https://nodei.co/npm/zive/)  
 
 [![Build Status](https://img.shields.io/travis/zigbeer/zive/master.svg?maxAge=2592000)](https://travis-ci.org/zigbeer/zive)
 [![npm](https://img.shields.io/npm/v/zive.svg?maxAge=2592000)](https://www.npmjs.com/package/zive)
 [![npm](https://img.shields.io/npm/l/zive.svg?maxAge=2592000)](https://www.npmjs.com/package/zive)
-
 
 ## Table of Contents  
 
@@ -35,14 +34,14 @@
 
 Here is a quick example to show you how to create your ZigBee Application:  
 
-```js 
+```js
 // Import the Zive Class
 var Zive = require('zive');
 
 // Prepare your endpoint information
 var epInfo = {
-        profId: 260,
-        devId: 6,
+        profId: 260,  // 'HA'
+        devId: 257,   // 'dimmableLight'
         discCmds: []
     };
 
@@ -50,10 +49,10 @@ var epInfo = {
 var Ziee = require('ziee'),
     ziee = new Ziee();
 
-ziee.init(cId, 'dir', ...);
-ziee.init(cId, 'attrs', ...);
-ziee.init(cId, 'acls', ...);
-ziee.init(cId, 'cmds', ...);
+ziee.init('lightingColorCtrl', 'dir', ...);
+ziee.init('lightingColorCtrl', 'attrs', ...);
+ziee.init('lightingColorCtrl', 'acls', ...);
+ziee.init('lightingColorCtrl', 'cmds', ...);
 
 // New a zive instance to be your ZigBee Application
 var zive = new Zive(epInfo, ziee);
@@ -70,11 +69,10 @@ var zive = new Zive(epInfo, ziee);
 
 *************************************************
 ## Zive Class
-Exposed by `require('zive')`  
+Exposed by `require('zive')`.  
 
 <a name="API_zive"></a>
 ### new Zive(epInfo, clusters)
-
 Create a new instance of `Zive` class. This document will use `zive` to denote the instance of this class. A `zive` represents a _ZigBee Application_.  
 
 **Arguments:**  
@@ -96,14 +94,14 @@ Create a new instance of `Zive` class. This document will use `zive` to denote t
 
 ```js
 var Zive = require('zive'),
-    Ziee = require('ziee'), 
-    
-var epInfo = {  
-        profId: 260,  
-        devId: 6,  
-        discCmds: []  
+    Ziee = require('ziee');
+
+var epInfo = {
+        profId: 260,  // 'HA'
+        devId: 257,   // 'dimmableLight'
+        discCmds: []
     },
-    ziee = new Ziee();  
+    ziee = new Ziee();
 
 ziee.init(...);
 
@@ -113,86 +111,81 @@ var zive = new Zive(epInfo, ziee);
 *************************************************
 <a name="API_found"></a>
 ### foundation(dstAddr, dstEpId, cId, cmd, zclData[, cfg], callback)  
-
-Send ZCL foundation command to another endpoint.  
+Send ZCL foundation command to another endpoint. Response will be passed through second argument of the callback.  
 
 **Arguments:**  
 
-1. `dstAddr` (_Number_): Short address of the destination device.  
-2. `dstEpId` (_Number_): Endpoint ID of the destination device.  
-3. `cId` (_Number_ | _String_): Specifies the cluster ID.  
-4. `cmd` (_String_ | _Number_): Foundation command ID.  
-5. `zclData` (_Object_ | _Array_): ZCL data depending on the given command. Please see [ZCL Foundation Command Reference Tables](https://github.com/zigbeer/zcl-packet#31-zcl-foundation-command-reference-table) for `zclData` format of different foundation command.  
+1. `dstAddr` (_String_ | _Number_): Address of the destination device. Ieee address if `dstAddr` is given with a string, or network address if it is given with a number.  
+2. `dstEpId` (_Number_): The endpoint id of the destination device.  
+3. `cId` (_String_ | _Number_): [Cluster id](https://github.com/zigbeer/zcl-id#Table), i.e. `'genBasic'`, `0`, `'genOnOff'`, `6`.  
+4. `cmd` (_String_ | _Number_): [ZCL foundation command id](https://github.com/zigbeer/zcl-packet#FoundCmdTbl), i.e. `'read'`, `0`, `'discover'`, `12`.  
+5. `zclData` (_Object_ | _Array_): zclData, which depends on the specified command. depending on the given command. Please see [ZCL Foundation Command Reference Tables](https://github.com/zigbeer/zcl-packet#FoundCmdTbl) for `zclData` format of different foundation command.  
 6. `cfg` (_Object_): The following table shows the `cfg` properties.  
-7. `callback` (_Function_): `function (err, result) {}`. Get called when receive the response of foundation command.   
+    - `manufSpec` (_Number_): Tells if this is a manufacturer-specific command. Default is `0`.  
+    - `direction` (_Number_): Tells whether a command is sent from client-to-server (c2s) or from server-to-client (s2c). Default is `1` to send command from server-to-client.  
+    - `disDefaultRsp` (_Number_): Disable default response. Default is `0` to enable the default response.  
+7. `callback` (_Function_): `function (err, rsp) { }`. Please refer to [**Payload** in foundation command table](https://github.com/zigbeer/zcl-packet#FoundCmdTbl) to learn more about the `rsp` object.  
 
-| Property      | Type  | Mandatory | Description              | Default value    |
-|---------------|-------|-----------|--------------------------| ---------------- |
-| manufSpec     | 1-bit | optional  | Manufacturer specific.   | 0                |
-| direction     | 1-bit | optional  | Direction                | 1                |
-| disDefaultRsp | 1-bit | optional  | Disable default response | 0                |
-
-**Returns**
+**Returns**  
 
 * (_None_)
 
-**Example:**
+**Example:**  
 
 ```js
-var foundData = [
-        { attrId: 0x0000 }, 
-        { attrId: 0x0001 }, 
-        { attrId: 0x0008 },
-        { attrId: 0x0010 }
-    ];
-
-zive.foundation(0x1234, 1, 'lightingColorCtrl', 'read', foundData, function (err, result) {
-    if (err)
-        console.log(err);
-    else
-        console.log(result);
+zive.foundation(0x1234, 1, 'genBasic', 'read', [ { attrId: 3 }, { attrId: 4 } ], function (err, rsp) {
+    if (!err)
+        console.log(rsp);
+// [
+//     {
+//         attrId: 3,     // hwVersion
+//         status: 0,     // success
+//         dataType: 32,  // uint8
+//         attrData: 0
+//     },
+//     {
+//         attrId: 4,     // manufacturerName
+//         status: 0,     // success
+//         dataType: 66,  // charStr
+//         attrData: 'TexasInstruments'
+//     }
+// ]
 });
 ```
 
 *************************************************
 <a name="API_func"></a>
 ### functional(dstAddr, dstEpId, cId, cmd, zclData[, cfg], callback)  
-
-Send ZCL functional command to another endpoint.  
+Send ZCL functional command to another endpoint. The response will be passed to the second argument of the callback.  
 
 **Arguments:**  
 
-1. `dstAddr` (_Number_): Short address of the destination device.  
-2. `dstEpId` (_Number_): Endpoint of the destination device.  
-3. `cId` (_Number_ | _String_): Specifies the cluster ID.  
-4. `cmd` (_String_ | _Number_): Functional command ID.  
-5. `zclData` (_Object_ | _Array_): ZCL data depending on the given command. Please see [ZCL Functional Command Reference Table](https://github.com/zigbeer/zcl-packet#FuncCmdTbl) for `zclData` format of different functional command.  
+1. `dstAddr` (_String_ | _Number_): Address of the destination device. Ieee address if `dstAddr` is given with a string, or network address if it is given with a number.  
+2. `dstEpId` (_Number_): The endpoint id of the destination device.  
+3. `cId` (_String_ | _Number_): [Cluster id](https://github.com/zigbeer/zcl-id#Table).  
+4. `cmd` (_String_ | _Number_):[ZCL functional command id](https://github.com/zigbeer/zcl-packet#FuncCmdTbl).  
+5. `zclData` (_Object_ | _Array_): zclData depending on the given command. Please see [ZCL Functional Command Reference Table](https://github.com/zigbeer/zcl-packet#FuncCmdTbl) for `zclData` format of different functional command.  
 6. `cfg` (_Object_): The following table shows the `cfg` properties.  
-7. `callback` (_Function_): `function (err, result) {}`. Get called when receive the response of functional command.   
+    - `manufSpec` (_Number_): Tells if this is a manufacturer-specific command. Default is `0`.  
+    - `direction` (_Number_): Tells whether a command is sent from client-to-server (c2s) or from server-to-client (s2c). Default is `1` to send command from server-to-client.  
+    - `disDefaultRsp` (_Number_): Disable default response. Default is `0` to enable the default response.  
+7. `callback` (_Function_): `function (err, rsp) { }`. Please refer to [**Arguments** in functional command table](https://github.com/zigbeer/zcl-packet#FuncCmdTbl) to learn more about the functional command `rsp` object.  
 
-| Property      | Type  | Mandatory | Description              | Default value    |
-|---------------|-------|-----------|--------------------------| ---------------- |
-| manufSpec     | 1-bit | optional  | Manufacturer specific.   | 0                |
-| direction     | 1-bit | optional  | Direction                | 1                |
-| disDefaultRsp | 1-bit | optional  | Disable default response | 0                |
-
-**Returns**
+**Returns**  
 
 * (_None_)
 
-**Example:**
+**Example:**  
 
 ```js
-var funcData = {
-        movemode: 20,
-        rate: 50
-    }
-
-zive.functional(0x1234, 1, 'lightingColorCtrl', 'moveToHue', funcData, function (err, result) {
-    if (err)
-        console.log(err);
-    else
-        console.log(result);
+zive.functional('0x00124b0001ce4beb', 1, 'lightingColorCtrl', 'moveHue', { movemode: 20, rate: 50 }, function (err, rsp) {
+    if (!err)
+        console.log(rsp);
+// This example receives a 'defaultRsp'
+// {
+//     cmdId: 2,
+//     statusCode: 0
+// }
 });
 ```
 
