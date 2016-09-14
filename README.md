@@ -115,16 +115,16 @@ Send ZCL foundation command to another endpoint. Response will be passed through
 
 **Arguments:**  
 
-1. `dstAddr` (_String_ | _Number_): Address of the destination device. Ieee address if `dstAddr` is given with a string, or network address if it is given with a number.  
+1. `dstAddr` (_String_ | _Number_): Address of the destination device. `dstAddr` will be taken as an IEEE address if it is given with a string, or a network address if it is given with a number.  
 2. `dstEpId` (_Number_): The endpoint id of the destination device.  
 3. `cId` (_String_ | _Number_): [Cluster id](https://github.com/zigbeer/zcl-id#Table), i.e. `'genBasic'`, `0`, `'genOnOff'`, `6`.  
 4. `cmd` (_String_ | _Number_): [ZCL foundation command id](https://github.com/zigbeer/zcl-packet#FoundCmdTbl), i.e. `'read'`, `0`, `'discover'`, `12`.  
-5. `zclData` (_Object_ | _Array_): zclData, which depends on the specified command. depending on the given command. Please see [ZCL Foundation Command Reference Tables](https://github.com/zigbeer/zcl-packet#FoundCmdTbl) for `zclData` format of different foundation command.  
-6. `cfg` (_Object_): The following table shows the `cfg` properties.  
+5. `zclData` (_Object_ | _Array_): ZCL data, which depends on the specified command. Please see [ZCL Foundation Command Reference Tables](https://github.com/zigbeer/zcl-packet#FoundCmdTbl) for `zclData` format of different foundation command.  
+6. `cfg` (_Object_): The following description shows the detail of `cfg` properties.  
     - `manufSpec` (_Number_): Tells if this is a manufacturer-specific command. Default is `0`.  
     - `direction` (_Number_): Tells whether a command is sent from client-to-server (c2s) or from server-to-client (s2c). Default is `1` to send command from server-to-client.  
     - `disDefaultRsp` (_Number_): Disable default response. Default is `0` to enable the default response.  
-7. `callback` (_Function_): `function (err, rsp) { }`. Please refer to [**Payload** in foundation command table](https://github.com/zigbeer/zcl-packet#FoundCmdTbl) to learn more about the `rsp` object.  
+7. `callback` (_Function_): `function (err, rsp) { }`. Get called when receive the response of foundation command. Please refer to [**Payload** in foundation command table](https://github.com/zigbeer/zcl-packet#FoundCmdTbl) to learn more about the `rsp` object.  
 
 **Returns**  
 
@@ -160,16 +160,16 @@ Send ZCL functional command to another endpoint. The response will be passed to 
 
 **Arguments:**  
 
-1. `dstAddr` (_String_ | _Number_): Address of the destination device. Ieee address if `dstAddr` is given with a string, or network address if it is given with a number.  
+1. `dstAddr` (_String_ | _Number_): Address of the destination device. `dstAddr` will be taken as an IEEE address if it is given with a string, or a network address if it is given with a number.  
 2. `dstEpId` (_Number_): The endpoint id of the destination device.  
 3. `cId` (_String_ | _Number_): [Cluster id](https://github.com/zigbeer/zcl-id#Table).  
 4. `cmd` (_String_ | _Number_):[ZCL functional command id](https://github.com/zigbeer/zcl-packet#FuncCmdTbl).  
-5. `zclData` (_Object_ | _Array_): zclData depending on the given command. Please see [ZCL Functional Command Reference Table](https://github.com/zigbeer/zcl-packet#FuncCmdTbl) for `zclData` format of different functional command.  
-6. `cfg` (_Object_): The following table shows the `cfg` properties.  
+5. `zclData` (_Object_ | _Array_): ZCL data, which depends on the specified command. Please see [ZCL Functional Command Reference Table](https://github.com/zigbeer/zcl-packet#FuncCmdTbl) for `zclData` format of different functional command.  
+6. `cfg` (_Object_): The following description shows the detail of `cfg` properties.  
     - `manufSpec` (_Number_): Tells if this is a manufacturer-specific command. Default is `0`.  
     - `direction` (_Number_): Tells whether a command is sent from client-to-server (c2s) or from server-to-client (s2c). Default is `1` to send command from server-to-client.  
     - `disDefaultRsp` (_Number_): Disable default response. Default is `0` to enable the default response.  
-7. `callback` (_Function_): `function (err, rsp) { }`. Please refer to [**Arguments** in functional command table](https://github.com/zigbeer/zcl-packet#FuncCmdTbl) to learn more about the functional command `rsp` object.  
+7. `callback` (_Function_): `function (err, rsp) { }`. Get called when receive the response of functional command. Please refer to [**Arguments** in functional command table](https://github.com/zigbeer/zcl-packet#FuncCmdTbl) to learn more about the functional command `rsp` object.  
 
 **Returns**  
 
