@@ -287,8 +287,8 @@ describe('Module Method Check', function() {
                         lastRpVal: 20
                     };
 
-                delete attr1RptCfg.rRpt;
-                delete attr2RptCfg.rRpt;
+                attr1RptCfg = { pmin: attr1RptCfg.pmin, pmax: attr1RptCfg.pmax, step: attr1RptCfg.step, lastRpVal: attr1RptCfg.lastRpVal };
+                attr2RptCfg = { pmin: attr2RptCfg.pmin, pmax: attr2RptCfg.pmax, step: attr2RptCfg.step, lastRpVal: attr2RptCfg.lastRpVal, timeout: attr2RptCfg.timeout };
 
                 foundationStub.firstCall.args[4].sort(function (x, y) {
                     return x.attrId > y.attrId;
@@ -325,7 +325,7 @@ describe('Module Method Check', function() {
                         lastRpVal: 20
                     };
 
-                delete attrRptCfg.rRpt;
+                attrRptCfg = { pmin: attrRptCfg.pmin, pmax: attrRptCfg.pmax, step: attrRptCfg.step, lastRpVal: attrRptCfg.lastRpVal, timeout: attrRptCfg.timeout };
 
                 foundationStub.firstCall.args[4].sort(function (x, y) {
                     return x.attrId > y.attrId;
@@ -359,7 +359,7 @@ describe('Module Method Check', function() {
                         lastRpVal: 50
                     };
 
-                delete attrRptCfg.rRpt;
+                attrRptCfg = { pmin: attrRptCfg.pmin, pmax: attrRptCfg.pmax, step: attrRptCfg.step, lastRpVal: attrRptCfg.lastRpVal };
 
                 if (_.isEqual(attrRptCfg, attrRptCfgResult) &&
                     _.isEqual(foundationStub.firstCall.args, attrRptArgs)) {
