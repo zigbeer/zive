@@ -1,6 +1,6 @@
 {
   "name": "zive",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A ZCL framework for zigbee applications.",
   "main": "index.js",
   "scripts": {
@@ -17,13 +17,13 @@
   },
   "homepage": "https://github.com/zigbeer/zive#readme",
   "dependencies": {
-    "busyman": "^0.2.1",
-    "zcl-id": "^0.1.4"
+    "busyman": "^0.3.0",
+    "zcl-id": "^0.2.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^2.5.3",
     "sinon": "^1.17.5",
-    "ziee": "^0.2.0"
+    "ziee": "^0.3.0"
   }
 }
