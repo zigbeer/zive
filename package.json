@@ -1,6 +1,6 @@
 {
   "name": "zive",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A ZCL framework for zigbee applications.",
   "main": "index.js",
   "scripts": {
